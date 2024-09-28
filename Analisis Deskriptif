@@ -1,0 +1,42 @@
+---
+title: "ANALISIS DESKRIPTIF"
+output: html_notebook
+---
+```{r}
+library(readxl)
+```
+
+```{r}
+getwd()
+setwd("C:/Users/USER/OneDrive - Universitas Sanata Dharma/Luluk Kuliah/Luluk Kuliah SEM 5/Penambangan Data/Tugas")
+data <- read_excel("FRESH_MART_PREPO.xlsx", sheet = 1)
+```
+```{r}
+head(data, 10)
+```
+
+```{r}
+# Mengecek Missing Value
+sapply(data, function(x) sum(is.na(x)))
+```
+```{r}
+data <- na.omit(data)
+```
+
+```{r}
+sapply(data_clean, function(x) sum(is.na(x)))
+# sudah tidak ada missing value (NA)
+```
+```{r}
+str(data)
+```
+```{r}
+# ubah tipe data
+data$`Submission Date` <- as.character(data$`Submission Date`)
+data$`Tanggal Pengiriman` <- as.character(data$`Tanggal Pengiriman`)
+data$`Metode Pembayaran` <- as.factor (data$`Metode Pembayaran`)
+```
+```{r}
+str(data)
+```
+
