@@ -35,8 +35,52 @@ str(data)
 data$`Submission Date` <- as.character(data$`Submission Date`)
 data$`Tanggal Pengiriman` <- as.character(data$`Tanggal Pengiriman`)
 data$`Metode Pembayaran` <- as.factor (data$`Metode Pembayaran`)
+data$Nama_Item <- as.factor (data$Nama_Item)
+data$Amount <- as.integer(data$Amount)
+data$Quantity <- as.integer(data$Quantity)
 ```
+
 ```{r}
 str(data)
 ```
+```{r}
+summary(data)
+```
 
+```{r}
+library(pracma)
+```
+
+```{r}
+Mode(data$Nama_Item)
+```
+```{r}
+Mode(data$`Metode Pembayaran`)
+```
+```{r}
+mean(data$Amount)
+```
+```{r}
+mean(data$Quantity)
+```
+```{r}
+median(data$Amount)
+```
+```{r}
+median(data$Quantity)
+```
+```{r}
+plot(data$Nama_Item)
+```
+```{r}
+plot(data$`Metode Pembayaran`)
+```
+```{r}
+hist(data$Amount)
+boxplot(data$Amount)
+```
+```{r}
+# bingung bacanya gimana
+hist(data$Quantity)
+boxplot(data$Quantity)
+```
