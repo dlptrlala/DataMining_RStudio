@@ -7,6 +7,14 @@ library(readxl)
 ```
 
 ```{r}
+library(dplyr)
+```
+
+```{r}
+library(pracma)
+```
+
+```{r}
 getwd()
 setwd("C:/Users/USER/OneDrive - Universitas Sanata Dharma/Luluk Kuliah/Luluk Kuliah SEM 5/Penambangan Data/Tugas")
 data <- read_excel("FRESH_MART_PREPO.xlsx", sheet = 1)
@@ -48,10 +56,6 @@ summary(data)
 ```
 
 ```{r}
-library(pracma)
-```
-
-```{r}
 Mode(data$Nama_Item)
 ```
 ```{r}
@@ -70,6 +74,23 @@ median(data$Amount)
 median(data$Quantity)
 ```
 ```{r}
+# range
+max(data$Amount) - min(data$Amount)
+max(data$Quantity) - min(data$Quantity)
+```
+```{r}
+# variansi
+var(data$Amount)
+var(data$Quantity)
+```
+
+```{r}
+# standart deviasi
+sd(data$Amount)
+sd(data$Quantity)
+```
+
+```{r}
 plot(data$Nama_Item)
 ```
 ```{r}
@@ -83,4 +104,80 @@ boxplot(data$Amount)
 # bingung bacanya gimana
 hist(data$Quantity)
 boxplot(data$Quantity)
+```
+```{r}
+data$Total_Belanja <- data$Amount * data$Quantity
+```
+
+```{r}
+head(data)
+```
+
+
+```{r}
+# Mengelompokkan data berdasarkan Nama dan Tanggal Pengiriman
+# Menghitung total belanja per pelanggan per tanggal pengiriman
+total_per_pelanggan <- data %>%
+  group_by(Nama, `Tanggal Pengiriman`, `Metode Pembayaran`, Quantity) %>%
+  summarise(Total_Belanja_Harian = sum(Amount), .groups = "drop")
+```
+
+```{r}
+# Menampilkan hasil total belanja per pelanggan
+print(total_per_pelanggan)
+```
+```{r}
+str(total_per_pelanggan)
+```
+```{r}
+# Apakah ada hubungan antara jumlah barang yang dibeli (`Quantity`) dan total belanja per pelanggan (`Total_Belanja`)?
+cor.test(total_per_pelanggan$Quantity, total_per_pelanggan$Total_Belanja_Harian)
+plot(total_per_pelanggan$Quantity, total_per_pelanggan$Total_Belanja_Harian)
+```
+
+```{r}
+# metode pembayaran (A) vs total belanja harian (B)
+t_test_result <- t.test(Total_Belanja_Harian ~ `Metode Pembayaran`, data = total_per_pelanggan)
+
+# Melihat hasil t-test
+print(t_test_result)
+```
+
+```{r}
+# Menghitung total jumlah pembelian per tanggal pengiriman
+total_quantity_per_date <- data %>%
+  group_by(`Tanggal Pengiriman`) %>%
+  summarise(Total_Quantity = sum(Quantity))
+```
+
+```{r}
+print(total_quantity_per_date)
+```
+
+```{r}
+# Mengonversi tanggal menjadi format yang sesuai
+total_quantity_per_date$`Tanggal Pengiriman` <- as.Date(total_quantity_per_date$`Tanggal Pengiriman`)
+
+# Melakukan regresi linear
+model <- lm(Total_Quantity ~ `Tanggal Pengiriman`, data = total_quantity_per_date)
+summary(model)
+```
+```{r}
+# 1. Relasi antara data numerik
+# Korelasi antara Amount dan Quantity
+correlation <- cor(data$Amount, data$Quantity)
+print(paste("Koefisien Korelasi antara Amount dan Quantity: ", correlation))
+# Scatter plot
+plot(data$Amount, data$Quantity, main = "Scatter Plot: Amount vs Quantity",
+     xlab = "Amount", ylab = "Quantity", pch = 19, col = "blue")
+
+```
+```{r}
+# Tabel kontingensi
+contingency_table <- with(data, table(`Metode Pembayaran`, Nama_Item))
+print(contingency_table)
+
+# Uji Chi-Square
+chi_square_test <- chisq.test(contingency_table)
+print(chi_square_test)
 ```
