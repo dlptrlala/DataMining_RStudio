@@ -106,6 +106,10 @@ hist(data$Quantity)
 boxplot(data$Quantity)
 ```
 ```{r}
+# Statistik inferensia
+```
+
+```{r}
 data$Total_Belanja <- data$Amount * data$Quantity
 ```
 
@@ -165,13 +169,12 @@ summary(model)
 ```{r}
 # 1. Relasi antara data numerik
 # Korelasi antara Amount dan Quantity
-correlation <- cor(data$Amount, data$Quantity)
-print(paste("Koefisien Korelasi antara Amount dan Quantity: ", correlation))
+cor.test(data$Amount, data$Quantity)
 # Scatter plot
-plot(data$Amount, data$Quantity, main = "Scatter Plot: Amount vs Quantity",
-     xlab = "Amount", ylab = "Quantity", pch = 19, col = "blue")
+plot(data$Amount, data$Quantity)
 
 ```
+
 ```{r}
 # Tabel kontingensi
 contingency_table <- with(data, table(`Metode Pembayaran`, Nama_Item))
